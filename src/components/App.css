@@ -1,0 +1,8 @@
+.text-container {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  background-color: orange;
+  /*class element but in react cannot use "class" cause it is a javascript class*/
+}
