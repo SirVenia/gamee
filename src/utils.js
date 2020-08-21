@@ -2,13 +2,23 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 
-export function fetchLeaderboard(game) {
+/*return a promise hilding an array of our score objects. *game aparmeter is either "memory", "snake" or "minesweeper" (collection id)
+ *oderBy is an array containting sorting instructins, e.g.:
+ * [["score, "desc], [ timeMS]], "asc"]]
+ */
+
+export function fetchLeaderboard(game, orderBy) {
   const auth = firebase.auth();
   const db = firebase.firestore();
-
   return auth
     .signInAnonymously()
-    .then(() => db.collection(game).orderBy("timeMs", "asc").get())
+    .then(() => {
+      let query = db.collection(game);
+      orderBy.forEach((rule) => {
+        query = query.orderBy(...rule);
+      });
+      return query.limit(10).get();
+    })
     .then((querySnapshot) => {
       let leaderboard = [];
       querySnapshot.forEach((doc) => {
@@ -17,7 +27,7 @@ export function fetchLeaderboard(game) {
       return leaderboard;
     })
     .catch(function (error) {
-      console.log("Error getting leaderboard: ", error);
+      console.log("Error error explosion bang. Getting leaderboard: ", error);
     });
 }
 

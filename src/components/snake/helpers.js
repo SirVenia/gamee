@@ -78,7 +78,10 @@ function generateNewTail(oldSnake, oldFood, newHead) {
   // Create a variable newTail (an array). Its first cell should be the old snake's head
   // and the rest of the cells should be the old snake's tail. Use concat() function
   // to add (append) a whole array to another array. Or you can use the [...myArray] syntax somehow... :)
-  let newTail = [oldSnake.head].concat(oldSnake.tail);
+  let newTail = [oldSnake.head];
+  newTail = newTail.concat(oldSnake.tail);
+
+  newTail = [oldSnake.head, ...oldSnake.tail];
 
   // Now the snake's tail has become longer! We should keep it like that if the snake has eaten,
   // otherwise we need to shorten it (remove the last element). Use the pop() function.
@@ -104,4 +107,16 @@ export function generateFood(snake) {
     };
   }
   return food;
+}
+
+export function isGameOver(game) {
+  const snake = game.snake;
+  return (
+    isOutOfBounds(snake.head) ||
+    snake.tail.some((cell) => isEqual(cell, snake.head))
+  );
+}
+
+function isOutOfBounds(cell) {
+  return cell.x < 0 || cell.x >= width || cell.y < 0 || cell.y >= height;
 }

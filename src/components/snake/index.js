@@ -7,11 +7,21 @@ const height = 12;
 
 function Snake() {
   const [game, setGame] = useState(helpers.generateGame());
+  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     const intervalId = setInterval(
-      () => setGame((oldGame) => helpers.tick(oldGame)),
-      400
+      () =>
+        setGame((oldGame) => {
+          const newGame = helpers.tick(oldGame);
+          if (helpers.isGameOver(newGame)) {
+            setGameOver(true);
+            console.log("You too slow for the mighty snake - yet. Try again!");
+            return oldGame;
+          }
+          return newGame;
+        }),
+      350
     );
     return () => clearInterval(intervalId);
   }, []);

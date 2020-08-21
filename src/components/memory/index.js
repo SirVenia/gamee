@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./index.css";
 import MemoryCard from "./MemoryCard";
-import StatusBar from "./StatusBar";
-import ResultModal from "./ResultModal";
+import StatusBar from "../StatusBar";
+import ResultModal from "../ResultModal";
+import * as utils from "../../utils";
 
 const colors = [
   "pink",
@@ -117,6 +118,16 @@ function Memory() {
     setWin(false);
   }
 
+  function fetchLeaderboard() {
+    return utils
+      .fetchLeaderboard("memory", [["timeMs", "asc"]])
+      .then((leaderboard) =>
+        leaderboard.map(
+          (score, i) => `${i + 1}. ${score.name}: ${score.timeMs}ms`
+        )
+      );
+  }
+
   function onCardClick(card) {
     // If the card is already flipped there is nothing we need to do.
     if (card.isFlipped) return;
@@ -169,9 +180,10 @@ function Memory() {
       </div>
       <ResultModal
         show={showModal}
-        header="Congratulations, you won!"
-        body={"Your time was " + prettifyTime(elapsedTime) + "."}
+        header="You did finally win!"
+        body={"Shüüüsh, you're time was " + prettifyTime(elapsedTime) + "ms."}
         handleClose={() => setShowModal(false)}
+        fetchLeaderboard={fetchLeaderboard}
       ></ResultModal>
     </div>
   );
