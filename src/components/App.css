@@ -4,5 +4,11 @@
   width: 100%;
   text-align: center;
   background-color: orange;
+  color: blueviolet;
   /*class element but in react cannot use "class" cause it is a javascript class*/
+}
+
+.game-container {
+  width: 40vw;
+  margin: 1vw auto;
 }
